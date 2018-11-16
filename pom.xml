@@ -25,4 +25,12 @@
         </dependency>
     </dependencies>
 
+    <repositories>
+        <repository>
+            <id>MuleSoft repository</id>
+            <name>MuleSoft repository</name>
+            <url>https://repository-master.mulesoft.org/nexus/content/repositories/releases/</url>
+        </repository>
+    </repositories>
+
 </project>
