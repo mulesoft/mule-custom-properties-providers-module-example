@@ -1,0 +1,13 @@
+<mule xmlns="http://www.mulesoft.org/schema/mule/core"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xmlns:custom-properties-provider="http://www.mulesoft.org/schema/mule/custom-properties-provider"
+      xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+          http://www.mulesoft.org/schema/mule/custom-properties-provider http://www.mulesoft.org/schema/mule/custom-properties-provider/current/mule-custom-properties-provider.xsd">
+
+    <custom-properties-provider:config name="config" customParameter="myCustomParameter"/>
+
+    <object name="testObject" class="com.my.company.custom.provider.TestObject">
+        <property key="valueFromProperty" value="${custom-properties-provider::testKey}" />
+    </object>
+
+</mule>
