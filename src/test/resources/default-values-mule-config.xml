@@ -4,22 +4,30 @@
       xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
           http://www.mulesoft.org/schema/mule/custom-properties-provider http://www.mulesoft.org/schema/mule/custom-properties-provider/current/mule-custom-properties-provider.xsd">
 
+    <!-- You can use global property to define default values for properties -->
+    <global-property name="myProperty" value="myPropertyValue"/>
+
     <custom-properties-provider:config name="config" dataGridUrl="myCustomParameter" env="dev">
+        <custom-properties-provider:default-values>
+            <custom-properties-provider:default-value key="b" defaultValue="bDefaultValue"/>
+            <custom-properties-provider:default-value key="c" defaultValue="cDefaultValue"/>
+        </custom-properties-provider:default-values>
         <custom-properties-provider:custom-properties-groups>
             <custom-properties-provider:custom-properties-group env="dev">
                 <custom-properties-provider:custom-properties>
-                    <custom-properties-provider:custom-property key="customPropertyA" value="customPropertyAValue"/>
+                    <custom-properties-provider:custom-property key="a" value="b"/>
+                    <custom-properties-provider:custom-property key="keyDependingOnDefaultValue" value="${myProperty}"/>
                 </custom-properties-provider:custom-properties>
             </custom-properties-provider:custom-properties-group>
         </custom-properties-provider:custom-properties-groups>
     </custom-properties-provider:config>
 
     <object name="testObject" class="com.my.company.custom.provider.TestObject">
-        <property key="valueFromProperty" value="${custom-properties-provider::customPropertyA}" />
+        <property key="valueFromProperty" value="${custom-properties-provider::keyDependingOnDefaultValue}" />
     </object>
 
-    <object name="testObjectWithValueFromCache" class="com.my.company.custom.provider.TestObject">
-        <property key="valueFromProperty" value="${custom-properties-provider::cachePropertyA}" />
+    <object name="testObjectUsingDefaultValueNotRedefinedInDevEnv" class="com.my.company.custom.provider.TestObject">
+        <property key="valueFromProperty" value="${custom-properties-provider::c}" />
     </object>
 
 </mule>

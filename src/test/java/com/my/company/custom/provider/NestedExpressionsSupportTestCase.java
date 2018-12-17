@@ -9,7 +9,7 @@ import javax.inject.Named;
 
 import org.junit.Test;
 
-public class CustomPropertiesProviderOperationsTestCase extends MuleArtifactFunctionalTestCase {
+public class NestedExpressionsSupportTestCase extends MuleArtifactFunctionalTestCase {
 
   /**
    * Specifies the mule config xml with the flows that are going to be executed in the tests, this file lives in the test
@@ -17,20 +17,18 @@ public class CustomPropertiesProviderOperationsTestCase extends MuleArtifactFunc
    */
   @Override
   protected String getConfigFile() {
-    return "test-mule-config.xml";
+    return "nested-expressions-support-mule-config.xml";
   }
 
-  @Inject
-  @Named("testObject")
+  @Inject @Named("testObject")
   private TestObject testObject;
-  @Inject
-  @Named("testObjectWithValueFromCache")
-  private TestObject testObjectWithValueFromCache;
+
+  @Inject @Named("testObject2") TestObject testObject2;
 
   @Test
   public void customPropertyProviderSuccessfullyConfigured() {
-    assertThat(testObject.getValueFromProperty(), is("customPropertyAValue"));
-    assertThat(testObjectWithValueFromCache.getValueFromProperty(), is("cachePropertyAValue"));
+    assertThat(testObject.getValueFromProperty(), is("myPropertyValue-myProperty2Value"));
+    assertThat(testObject2.getValueFromProperty(), is("customPropAValue-customPropBValue"));
   }
 
 }

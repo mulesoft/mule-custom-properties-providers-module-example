@@ -1,0 +1,46 @@
+<mule xmlns="http://www.mulesoft.org/schema/mule/core"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xmlns:custom-properties-provider="http://www.mulesoft.org/schema/mule/custom-properties-provider"
+      xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+          http://www.mulesoft.org/schema/mule/custom-properties-provider http://www.mulesoft.org/schema/mule/custom-properties-provider/current/mule-custom-properties-provider.xsd">
+
+    <!-- You can use global property to define default values for properties -->
+    <global-property name="myProperty" value="myPropertyValue"/>
+    <global-property name="myProperty2" value="myProperty2Value"/>
+
+    <!-- The  custom-properties-provider:config can reference properties defined by:
+        - System properties
+        - Environment variables
+        - Global properties
+        But they cannot reference properties defined by a <configuration-properties> or <secure-properties:config> components
+       -->
+    <custom-properties-provider:config name="config" dataGridUrl="myCustomParameter" env="dev">
+        <custom-properties-provider:custom-properties-groups>
+            <custom-properties-provider:custom-properties-group env="prod">
+                <custom-properties-provider:custom-properties>
+                    <custom-properties-provider:custom-property key="customPropA" value="customPropAValueProd"/>
+                    <custom-properties-provider:custom-property key="customPropB" value="customPropBValueProd"/>
+                    <custom-properties-provider:custom-property key="nestedCustomProp" value="${myProperty}-${myProperty2}-Prod"/> <!-- value should be myPropertyValue-myPropertyValue2 -->
+                </custom-properties-provider:custom-properties>
+            </custom-properties-provider:custom-properties-group>
+            <custom-properties-provider:custom-properties-group env="dev">
+                <custom-properties-provider:custom-properties>
+                    <custom-properties-provider:custom-property key="customPropA" value="customPropAValue"/>
+                    <custom-properties-provider:custom-property key="customPropB" value="customPropBValue"/>
+                    <custom-properties-provider:custom-property key="nestedCustomProp" value="${myProperty}-${myProperty2}"/> <!-- value should be myPropertyValue-myPropertyValue2 -->
+                </custom-properties-provider:custom-properties>
+            </custom-properties-provider:custom-properties-group>
+        </custom-properties-provider:custom-properties-groups>
+    </custom-properties-provider:config>
+
+    <object name="testObject" class="com.my.company.custom.provider.TestObject">
+        <property key="valueFromProperty" value="${custom-properties-provider::nestedCustomProp}" />
+    </object>
+
+    <object name="testObject2" class="com.my.company.custom.provider.TestObject">
+        <property key="valueFromProperty" value="${custom-properties-provider::customPropA}-${custom-properties-provider::customPropB}" />
+    </object>
+
+
+
+</mule>

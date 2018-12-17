@@ -9,7 +9,7 @@ import javax.inject.Named;
 
 import org.junit.Test;
 
-public class CustomPropertiesProviderOperationsTestCase extends MuleArtifactFunctionalTestCase {
+public class DefaultValueUsingGlobalPropertyTestCase extends MuleArtifactFunctionalTestCase {
 
   /**
    * Specifies the mule config xml with the flows that are going to be executed in the tests, this file lives in the test
@@ -17,20 +17,21 @@ public class CustomPropertiesProviderOperationsTestCase extends MuleArtifactFunc
    */
   @Override
   protected String getConfigFile() {
-    return "test-mule-config.xml";
+    return "default-values-mule-config.xml";
   }
 
   @Inject
   @Named("testObject")
   private TestObject testObject;
+
   @Inject
-  @Named("testObjectWithValueFromCache")
-  private TestObject testObjectWithValueFromCache;
+  @Named("testObjectUsingDefaultValueNotRedefinedInDevEnv")
+  private TestObject testObjectUsingDefaultValue;
 
   @Test
   public void customPropertyProviderSuccessfullyConfigured() {
-    assertThat(testObject.getValueFromProperty(), is("customPropertyAValue"));
-    assertThat(testObjectWithValueFromCache.getValueFromProperty(), is("cachePropertyAValue"));
+    assertThat(testObject.getValueFromProperty(), is("myPropertyValue"));
+    assertThat(testObjectUsingDefaultValue.getValueFromProperty(), is("cDefaultValue"));
   }
 
 }
