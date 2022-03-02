@@ -9,6 +9,7 @@ package com.my.company.custom.provider.api;
 import static com.my.company.custom.provider.api.CustomConfigurationPropertiesExtensionLoadingDelegate.CONFIG_ELEMENT;
 import static com.my.company.custom.provider.api.CustomConfigurationPropertiesExtensionLoadingDelegate.EXTENSION_NAME;
 import static org.mule.runtime.api.component.ComponentIdentifier.builder;
+import static org.mule.runtime.extension.api.util.NameUtils.defaultNamespace;
 import org.mule.runtime.api.component.ComponentIdentifier;
 import org.mule.runtime.config.api.dsl.model.ConfigurationParameters;
 import org.mule.runtime.config.api.dsl.model.ResourceProvider;
@@ -25,8 +26,7 @@ import java.util.Optional;
  */
 public class CustomConfigurationPropertiesProviderFactory implements ConfigurationPropertiesProviderFactory {
 
-  public static final String EXTENSION_NAMESPACE =
-      EXTENSION_NAME.toLowerCase().replace(" ", "-");
+  public static final String EXTENSION_NAMESPACE = defaultNamespace(EXTENSION_NAME);
   private static final ComponentIdentifier CUSTOM_PROPERTIES_PROVIDER =
       builder().namespace(EXTENSION_NAMESPACE).name(CONFIG_ELEMENT).build();
   // TODO change to meaningful prefix
