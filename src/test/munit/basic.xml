@@ -1,0 +1,25 @@
+<mule xmlns="http://www.mulesoft.org/schema/mule/core"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xmlns:custom-properties-provider="http://www.mulesoft.org/schema/mule/custom-properties-provider"
+      xmlns:munit="http://www.mulesoft.org/schema/mule/munit"
+      xmlns:munit-tools="http://www.mulesoft.org/schema/mule/munit-tools"
+      xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+          http://www.mulesoft.org/schema/mule/munit http://www.mulesoft.org/schema/mule/munit/current/mule-munit.xsd
+          http://www.mulesoft.org/schema/mule/munit-tools  http://www.mulesoft.org/schema/mule/munit-tools/current/mule-munit-tools.xsd
+          http://www.mulesoft.org/schema/mule/custom-properties-provider http://www.mulesoft.org/schema/mule/custom-properties-provider/current/mule-custom-properties-provider.xsd">
+
+    <munit:config name="Basic Suite" />
+
+    <custom-properties-provider:config name="config" customParameter="myCustomParameter"/>
+
+    <munit:test name="Basic Test" description="Checks property value can be used">
+        <munit:execution>
+            <set-payload value="${custom-properties-provider::testKey}"/>
+        </munit:execution>
+
+        <munit:validation>
+            <munit-tools:assert-that expression="#[payload]" is="#[MunitTools::equalTo('myCustomParameter')]"/>
+        </munit:validation>
+    </munit:test>
+
+</mule>
