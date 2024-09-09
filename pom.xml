@@ -16,6 +16,43 @@
         <version>1.1.11</version>
     </parent>
 
+    <properties>
+        <munit.extensions.maven.plugin.version>1.3.0</munit.extensions.maven.plugin.version>
+        <munit.min.mule.version>${mule.version}</munit.min.mule.version>
+
+        <!-- Latest MUnit plugins version supporting this artifact's MMV (4.1.1)-->
+        <munit.version>2.3.18</munit.version>
+    </properties>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>com.mulesoft.munit</groupId>
+                <artifactId>munit-extensions-maven-plugin</artifactId>
+                <version>${munit.extensions.maven.plugin.version}</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>test</goal>
+                        </goals>
+                        <phase>integration-test</phase>
+                    </execution>
+                </executions>
+                <configuration>
+                    <runtimeConfiguration>
+                        <!-- Versions with support and snapshots -->
+                        <discoverRuntimes>
+                            <product>EE</product>
+                            <minMuleVersion>${munit.min.mule.version}</minMuleVersion>
+                            <includeSnapshots>false</includeSnapshots>
+                            <latestPatches>true</latestPatches>
+                        </discoverRuntimes>
+                    </runtimeConfiguration>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
     <dependencies>
         <dependency>
             <groupId>org.mule.sdk</groupId>
@@ -28,7 +65,34 @@
             <version>${mule.version}</version>
             <scope>provided</scope>
         </dependency>
+
+        <dependency>
+            <groupId>com.mulesoft.munit</groupId>
+            <artifactId>munit-runner</artifactId>
+            <version>${munit.version}</version>
+            <classifier>mule-plugin</classifier>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>com.mulesoft.munit</groupId>
+            <artifactId>munit-tools</artifactId>
+            <version>${munit.version}</version>
+            <classifier>mule-plugin</classifier>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
+
+    <profiles>
+        <profile>
+            <!-- When running with JDK17 we need a higher MMV (>=4.6) and higher MUnit plugins version that support JDK17 -->
+            <id>jdk17</id>
+            <properties>
+                <munit.version>3.2.0</munit.version>
+                <munit.min.mule.version>4.6.0</munit.min.mule.version>
+            </properties>
+        </profile>
+    </profiles>
 
     <repositories>
         <repository>
